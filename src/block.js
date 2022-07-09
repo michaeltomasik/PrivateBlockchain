@@ -38,10 +38,18 @@ class Block {
     validate() {
         let self = this;
         return new Promise((resolve, reject) => {
-            // Save in auxiliary variable the current block hash
-                                            
+            // Save in auxiliary variable the current block hash                     
             // Recalculate the hash of the Block
+
+            // For generating address
+            // https://www.bitaddress.org/bitaddress.org-v3.3.0-SHA256-dec17c07685e1870960903d8f58090475b25af946fe95a734f88408cef4aa194.html
+            const currentBlockHash = SHA256(JSON.stringify(self)).toString();   
             // Comparing if the hashes changed
+            if (currentBlockHash === self.hash) {
+                resolve(currentBlockHash)
+            } else {
+                reject(Error('Did no walidate the chain'))
+            }
             // Returning the Block is not valid
             
             // Returning the Block is valid
@@ -62,8 +70,14 @@ class Block {
         // Getting the encoded data saved in the Block
         // Decoding the data to retrieve the JSON representation of the object
         // Parse the data to an object to be retrieve.
-
-        // Resolve with the data if the object isn't the Genesis block
+        return new Promise((resolve, reject) => {
+            // Resolve with the data if the object isn't the Genesis block
+            if (this.previousBlockHash) {
+                const encodedData = hex2ascii(this.body)
+                resolve(JSON.parse(encodedData))
+            }
+            reject(Error(''))
+        })
 
     }
 
