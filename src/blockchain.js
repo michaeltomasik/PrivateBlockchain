@@ -208,11 +208,15 @@ class Blockchain {
         let self = this;
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
-            self.chain.forEach(block => {
-                if(block.previousBlockHash === block.validate()) {
+            await self.chain.forEach(async (block) => {
+                const hash = await block.validate()
+                if(block.previousBlockHash === hash) {
                     errorLog = [...errorLog, block]
                 }
             })
+            if (errorLog.length === 0) resolve(true)
+
+            reject(errorLog)
         });
     }
 

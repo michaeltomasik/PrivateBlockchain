@@ -125,7 +125,7 @@ class BlockchainController {
     // This endpoint allows you to request the list of Stars registered by an owner
     validateChain() {
         this.app.get("/validateChain", async (req, res) => {
-            const isValidated = this.blockchain.validateChain()
+            const isValidated = await this.blockchain.validateChain()
             return res.status(500).send(`Is Chain Validated ${isValidated}`);
             
         });
